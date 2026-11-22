@@ -1,96 +1,34 @@
-# 🌈 Rainbow Readers
+# Rainbow Readers
 
-> **A color-coded reading system for CBC learners in Grades 1–3 at Madaraka Primary built so students can practice, teachers can track, and parents can support, at home or on the classroom TV.**
+Rainbow Readers is a web application for reading practice and progress tracking for CBC learners in Grades 1–3. Students practise activities matched to their grade and color level. Teachers manage learners and review progress, and parents can follow the progress of children linked to their account.
 
-Rainbow Readers organizes foundational reading into three color-coded pathways — **Starting (Blue)**, **Growing (Gold)**, and **Exploring (Green)** — keeping reading practice private, encouraging, and stigma-free between school and home.
+## Main features
 
----
+- Three private practice levels: Purple (early sounds and short words), Yellow (words and phrases), and Red (sentences and comprehension).
+- Read-along activities with browser speech audio, hints, and multiple-choice questions.
+- Level Checks, weekly checks, weekly activity pacing, and progress records.
+- Free Reading stories, including stories teachers can add for a grade and level.
+- Teacher tools for learner and parent accounts, progress review, and classroom TV mode.
+- Parent views for linked learners’ levels, activities, and progress reports.
 
-## 🌟 Key Features
+## How it works
 
-1. **Role-Based Access (3 Portals)**:
-   - **Student Portal**: Take a 5-stage baseline assessment, practice pronunciation with audio, read sentences with karaoke-style highlighting, and unlock badges.
-   - **Teacher Portal**: Class Overview with 13 learners, "Needs support" tracking, pathway distribution analytics, and TV / Classroom Mode.
-   - **Parent Portal**: View child's milestones, earned stickers, and daily home reading audio guides.
-2. **Built-in Offline Audio Engine**:
-   - Uses Web Speech API for clear letter, syllable, word, and sentence pronunciation.
-   - Uses Web Audio API for success chimes and celebratory fanfares.
-   - Zero external audio file failures or buffering delays!
-3. **Classroom TV / Projector Mode**:
-   - High-contrast, large-format display for classroom TVs and projectors.
-   - Whole-class audio broadcast and comprehension polls.
-4. **Data Persistence**:
-   - Stores progress and unlocked badges in `localStorage`.
-   - Includes a 1-click **Reset Demo Data** button in the footer for repeatable walkthroughs.
+The frontend uses plain HTML, CSS, and JavaScript; it does not require Node.js to run. `index.html` loads the app from `styles.css`, `data.js`, and `app.js`.
 
----
+Netlify or another static host can serve the website files. Supabase is a separate backend: the browser calls Supabase database functions to log in, load learner and class data, and save progress. Activity content is in `data.js`; teacher-added stories and learner records are stored in Supabase.
 
-## 🔑 Demo Accounts (Displayed on Login Screen)
+The current code uses custom login and session functions defined in the database, rather than Supabase Auth. The Supabase project must be active and have the required database tables and functions for login and data features to work.
 
-| Role | Username | Password | Profile |
-| :--- | :--- | :--- | :--- |
-| **Student** | `amani` | `read123` | **Amani Otieno** (Grade 2, Class 2A) |
-| **Teacher** | `kamau` | `teach123` | **Mrs. Wanjiru Kamau** (Madaraka Primary) |
-| **Parent** | `parent` | `home123` | **Mrs. Otieno** (Parent of Amani) |
+## Run locally
 
-*Each login screen provides a 1-click **"⚡ 1-Click Sign In"** button for instant demonstration.*
+Open `index.html` in a browser, or serve this folder with any local static web server. The pages can load locally, but login and shared data still require an internet connection and a working Supabase project.
 
----
+## Backend setup
 
-## 🚀 Running Locally
+The Supabase SQL setup script is not currently included in this repository. Ask the project owner for the reviewed setup script and Supabase project access. Do not put a Supabase service-role key, dashboard password, or other secret in the frontend.
 
-Rainbow Readers has **zero external dependencies** and runs with pure modern web standards.
+## Current implementation notes
 
-```bash
-# Start the local server
-node server.js
-```
-
-Open your browser at:  
-👉 **`http://localhost:3000`**
-
----
-
-## 🌐 Deploying to GitHub Pages (Free Online Hosting)
-
-Because Rainbow Readers uses **100% relative paths (`./`)** and client-side hash routing (`#/`), it is completely ready for GitHub Pages:
-
-1. **Create a new repository** on [GitHub](https://github.com/new) (e.g., named `rainbow-readers`).
-2. In your terminal inside this project folder:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit of Rainbow Readers CBC web app"
-   git branch -M main
-   git remote add origin https://github.com/<YOUR-GITHUB-USERNAME>/rainbow-readers.git
-   git push -u origin main
-   ```
-3. In your GitHub repository:
-   - Go to **Settings** &rarr; **Pages** (under the "Code and automation" section).
-   - Under **Build and deployment** &gt; **Source**, select **Deploy from a branch**.
-   - Select branch: **`main`** and folder: **`/ (root)`**, then click **Save**.
-4. Within 1–2 minutes, your live site will be accessible at:  
-   👉 `https://<YOUR-GITHUB-USERNAME>.github.io/rainbow-readers/`
-
----
-
-## 📁 Project Structure
-
-```
-rainbow-readers/
-├── index.html            # Main HTML shell with SEO meta tags
-├── server.js             # Zero-dependency local Node.js server
-├── package.json          # Project metadata and run scripts
-├── README.md             # Documentation & deployment guide
-├── css/
-│   └── styles.css        # Complete design system & responsive styling
-└── js/
-    ├── app.js            # App controller & hash routing
-    ├── audio.js          # Web Speech & Web Audio synthesizer engine
-    ├── data.js           # Curriculum bank, 13 CBC learners, demo users
-    ├── parent.js         # Parent dashboard & Milestones cards
-    ├── public.js         # Home, About (exact replica), How It Works, Login
-    ├── store.js          # Persistent reactive state store in localStorage
-    ├── student.js        # 5-stage comprehension check & badge unlock
-    └── teacher.js        # Class Overview, Analytics charts, TV Mode
-```
+- The supplied frontend includes a teacher-administration screen, but its `rr_admin_*` database functions are not included in the SQL setup file previously reviewed. That screen needs matching backend functions before it can be relied on.
+- In the SQL setup previously reviewed, teacher data loading returns all learners; grade-restricted teacher access is not implemented there.
+- The project has not been load-tested, so no maximum number of simultaneous users or response-time guarantee is claimed.
